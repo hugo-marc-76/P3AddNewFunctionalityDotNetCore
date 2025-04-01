@@ -26,7 +26,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         {
             // Arrange        
             var options = new DbContextOptionsBuilder<P3Referential>()
-                .UseSqlServer("Server=localhost;Database=P3Referential-2f561d3b-493f-46fd-83c9-6e2643e7bd0a;Trusted_Connection=True;MultipleActiveResultSets=true")
+                .UseSqlServer("Server=HUGOPC;Database=P3Referential;Trusted_Connection=True;MultipleActiveResultSets=true")
                 .Options;
 
             using (var ctx = new P3Referential(options, _configuration))
@@ -65,7 +65,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         {
             // Arrange        
             var options = new DbContextOptionsBuilder<P3Referential>()
-                .UseSqlServer("Server=localhost;Database=P3Referential-2f561d3b-493f-46fd-83c9-6e2643e7bd0a;Trusted_Connection=True;MultipleActiveResultSets=true")
+                .UseSqlServer("Server=HUGOPC;Database=P3Referential;Trusted_Connection=True;MultipleActiveResultSets=true")
                 .Options;
 
             using (var ctx = new P3Referential(options, _configuration))

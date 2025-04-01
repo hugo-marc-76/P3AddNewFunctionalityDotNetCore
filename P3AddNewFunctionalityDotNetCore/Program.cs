@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using P3AddNewFunctionalityDotNetCore;
 using System.Linq;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,12 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddMvc()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources"; })
-    .AddDataAnnotationsLocalization();
+    .AddDataAnnotationsLocalization(options => {
+        options.DataAnnotationLocalizerProvider = (type, factory) => {
+            var assemblyName = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
+            return factory.Create("Models.Services.ProductViewModel", assemblyName);
+        };
+    });
 
 builder.Services.AddDbContext<P3Referential>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("P3Referential")));
@@ -62,7 +68,7 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-var supportedCultures = new[] { "en-GB", "en-US", "en", "fr-FR", "fr" };
+var supportedCultures = new[] { "en-GB", "en-US", "en", "fr-FR", "fr", "es-ES", "es" };
 var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
     .AddSupportedCultures(supportedCultures.ToArray())
     .AddSupportedUICultures(supportedCultures);

@@ -8,18 +8,15 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
     {
         [BindNever]
         public int Id { get; set; }
-
         [Required(ErrorMessage = "MissingName")]
         public string Name { get; set; }
 
         public string Description { get; set; }
 
         public string Details { get; set; }
-
-        [Required(ErrorMessage = "MissingQuantity")]
-        [Range(1, int.MaxValue, ErrorMessage = "QuantityNotGreaterThanZero")]
+        [Required(ErrorMessage = "MissingStock")]
+        [Range(1, int.MaxValue, ErrorMessage = "StockNotGreaterThanZero")]
         public string Stock { get; set; }
-
         [Required(ErrorMessage = "MissingPrice")]
         [IsNumber(ErrorMessage = "PriceNotANumber")]
         [Range(0.01, double.MaxValue, ErrorMessage = "PriceNotGreaterThanZero")]
@@ -30,13 +27,13 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            // Si la valeur est une chaîne, on essaie de la convertir en nombre (en utilisant le format invariant)
             if (value is string strValue && !double.TryParse(strValue, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
             {
-                return new ValidationResult("PriceNotANumber");
+                // La méthode FormatErrorMessage() va récupérer le message d'erreur localisé grâce aux propriétés ErrorMessageResourceType et ErrorMessageResourceName
+                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
             }
-
             return ValidationResult.Success;
         }
     }
-
 }
