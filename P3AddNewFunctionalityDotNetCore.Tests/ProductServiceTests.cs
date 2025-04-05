@@ -27,7 +27,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         [Fact]
         public void TestMissingName()
         {
-            product.Name = null;
+            product.Name = string.Empty;
             product.Price = "25.0";
             product.Stock = "10";
             Assert.False(ValidateModel(product));
@@ -54,8 +54,6 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             Assert.Equal("PriceNotGreaterThanZero", GetFirstErrorMessage(product));
         }
 
-
-
         [Fact]
         public void TestQuantityNotGreaterThanZero()
         {
@@ -63,10 +61,67 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             product.Price = " 10.0";
             product.Stock = "0";
             Assert.False(ValidateModel(product));
-            Assert.Equal("QuantityNotGreaterThanZero", GetFirstErrorMessage(product));
+            Assert.Equal("StockNotGreaterThanZero", GetFirstErrorMessage(product));
         }
 
+        [Fact]
+        public void TestStockNotANumber()
+        {
+            product.Name = "Product5";
+            product.Price = "10.0";
+            product.Stock = "abc";
+            Assert.False(ValidateModel(product));
+            Assert.Equal("StockNotAnInteger", GetFirstErrorMessage(product));
+        }
 
+        [Fact]
+        public void TestPriceWithDecimals()
+        {
+            product.Name = "Product6";
+            product.Price = "5.8";
+            product.Stock = "3";
+            Assert.True(ValidateModel(product));
+        }
+
+        [Fact]
+        public void TestNegativePrice()
+        {
+            product.Name = "Product7";
+            product.Price = "-5";
+            product.Stock = "3";
+            Assert.False(ValidateModel(product));
+            Assert.Equal("PriceNotGreaterThanZero", GetFirstErrorMessage(product));
+        }
+
+        [Fact]
+        public void TestNegativeStock()
+        {
+            product.Name = "Product8";
+            product.Price = "5";
+            product.Stock = "-1";
+            Assert.False(ValidateModel(product));
+            Assert.Equal("StockNotGreaterThanZero", GetFirstErrorMessage(product));
+        }
+
+        [Fact]
+        public void TestStockWithDecimals()
+        {
+            product.Name = "Product9";
+            product.Price = "5";
+            product.Stock = "5.5";
+            Assert.False(ValidateModel(product));
+            Assert.Equal("StockNotAnInteger", GetFirstErrorMessage(product));
+        }
+
+        [Fact]
+        public void TestMissingStock()
+        {
+            product.Name = "Product10";
+            product.Price = "5";
+            product.Stock = null;
+            Assert.False(ValidateModel(product));
+            Assert.Equal("MissingStock", GetFirstErrorMessage(product));
+        }
 
         // Ajoutez ici d'autres méthodes pour tester les autres cas...
 

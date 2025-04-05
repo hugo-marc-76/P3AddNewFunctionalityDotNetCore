@@ -15,6 +15,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
 
         public string Details { get; set; }
         [Required(ErrorMessage = "MissingStock")]
+        [IsInteger(ErrorMessage = "StockNotAnInteger")]
         [Range(1, int.MaxValue, ErrorMessage = "StockNotGreaterThanZero")]
         public string Stock { get; set; }
         [Required(ErrorMessage = "MissingPrice")]
@@ -31,6 +32,20 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
             if (value is string strValue && !double.TryParse(strValue, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
             {
                 // La méthode FormatErrorMessage() va récupérer le message d'erreur localisé grâce aux propriétés ErrorMessageResourceType et ErrorMessageResourceName
+                return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
+            }
+            return ValidationResult.Success;
+        }
+    }
+
+    public class IsIntegerAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            // Si la valeur est une chaîne, on essaie de la convertir en nombre entier
+            if (value is string strValue && !int.TryParse(strValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out _))
+            {
+                // La valeur n'est pas un entier valide
                 return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
             }
             return ValidationResult.Success;
