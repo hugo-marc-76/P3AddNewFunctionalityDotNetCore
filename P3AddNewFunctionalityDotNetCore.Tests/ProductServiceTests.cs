@@ -48,8 +48,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         public void TestPriceNotGreaterThanZero()
         {
             product.Name = "Product3";
-            product.Price = "0.0";
-            product.Stock = "19";
+            product.Price = "-5.0";
+            product.Stock = "10";
             Assert.False(ValidateModel(product));
             Assert.Equal("PriceNotGreaterThanZero", GetFirstErrorMessage(product));
         }
@@ -79,7 +79,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         {
             product.Name = "Product6";
             product.Price = "5.8";
-            product.Stock = "3";
+            product.Stock = "10";
             Assert.True(ValidateModel(product));
         }
 
@@ -88,7 +88,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         {
             product.Name = "Product7";
             product.Price = "-5";
-            product.Stock = "3";
+            product.Stock = "10";
             Assert.False(ValidateModel(product));
             Assert.Equal("PriceNotGreaterThanZero", GetFirstErrorMessage(product));
         }
@@ -118,7 +118,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         {
             product.Name = "Product10";
             product.Price = "5";
-            product.Stock = null;
+            product.Stock = string.Empty;
             Assert.False(ValidateModel(product));
             Assert.Equal("MissingStock", GetFirstErrorMessage(product));
         }
